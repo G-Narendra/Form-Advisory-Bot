@@ -41,7 +41,7 @@ def get_farm_knowledge(query: str) -> str:
         return "Warning: Pinecone API key missing. RAG context unavailable."
         
     try:
-        embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+        embeddings = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-2")
         index_name = os.getenv("PINECONE_INDEX", "farm-advisory")
         
         vector_store = PineconeVectorStore(

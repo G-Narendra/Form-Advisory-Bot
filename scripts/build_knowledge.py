@@ -33,12 +33,12 @@ def main():
         print(f"Creating Pinecone index: {index_name}")
         pc.create_index(
             name=index_name,
-            dimension=768, # Google embeddings dimension
+            dimension=3072, # Google gemini-embedding-2 dimension
             metric="cosine",
             spec=ServerlessSpec(cloud="aws", region="us-east-1")
         )
 
-    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+    embeddings = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-2")
     
     print("Embedding and uploading to Pinecone... This may take a moment.")
     
