@@ -1,35 +1,63 @@
-# Project 7: Real-Time Farm Advisory Bot 🚜
+# 🚜 Project 7: Real-Time Farm Advisory Bot
 
 ## 🎯 Problem Statement
-UAE farmers face challenges in managing irrigation and diagnosing crop diseases in the arid climate. They need immediate, localized advice. Waiting for long AI response generation times ruins the user experience in the field.
+UAE farms, particularly in regions like Al Ain and Fujairah, face unique challenges due to an arid climate. Farmers need immediate, actionable advice on irrigation, pest management, and crop health. Traditional AI systems often have long latency, which is suboptimal for field use. This system provides a **high-speed, context-aware advisory bot** that streams responses in real-time.
 
 ## 🏗️ Architecture
-This system utilizes **RAG + Real-Time Streaming**:
-- **RAG Knowledge Base**: Uses Hugging Face's `argilla/farming` dataset embedded into **Pinecone** for deep agricultural knowledge.
-- **Context Awareness**: Pulls real-time live weather using **OpenWeatherMap API** to adjust advice (e.g., stopping irrigation if humidity is high or rain is expected).
-- **Streaming UI**: Uses Gemini 2.5 Flash and Streamlit's `st.write_stream` to yield tokens to the screen the millisecond they are generated.
+The system is built with a **RAG + Real-Time Streaming** architecture:
+- **RAG Knowledge Base**: Uses the `argilla/farming` dataset from Hugging Face, embedded into **Pinecone** for specialized agricultural intelligence.
+- **Context Awareness**: Integrates with the **OpenWeatherMap API** to provide advice based on live local conditions (Temperature, Humidity, Forecast).
+- **Streaming UI**: Powered by **Gemini 2.5 Flash** and Streamlit's `write_stream` for a "typing" effect that shows data the moment it's generated.
 
-## 🚀 Setup & Run
-
-```bash
-# 1. Install Dependencies
-pip install -r requirements.txt
-
-# 2. Add your keys to .env
-# OPENWEATHERMAP_API_KEY=your_key
-# PINECONE_API_KEY=your_key
-# GEMINI_API_KEY=your_key
-
-# 3. Build the Vector Database (Run Once)
-python scripts/build_knowledge.py
-
-# 4. Start the Application
-streamlit run app.py
+```mermaid
+graph TD
+    A[Farmer Query] --> B[RAG Retrieval\nPinecone + Google Embeddings]
+    A --> C[Live Weather Fetch\nOpenWeatherMap API]
+    B --> D[Gemini 2.5 Flash\nStreaming Engine]
+    C --> D
+    D --> E[Real-Time Streamlit UI]
 ```
 
-## 🧠 Tech Stack
-- **Vector DB**: Pinecone Serverless
-- **Data Source**: Hugging Face Datasets (`argilla/farming`)
-- **LLM**: Gemini 2.5 Flash (Streaming Mode)
-- **APIs**: OpenWeatherMap
-- **Framework**: Streamlit
+## 🚀 Key Features
+- **Instant Advice**: Response streaming ensures farmers don't have to wait for the entire answer to be generated.
+- **Weather-Integrated Guidance**: Irrigation and planting advice adjusts automatically based on current UAE heat and humidity.
+- **Specialized Data**: No synthetic data used; built on real-world farming datasets.
+- **Standard Layout**: Follows the production-ready portfolio folder structure.
+
+## 🛠️ Tech Stack
+- **LLM**: Gemini 2.5 Flash (Streaming mode)
+- **Vector DB**: Pinecone (Serverless Index)
+- **Embeddings**: Google `gemini-embedding-2` (3072-dim)
+- **Weather API**: OpenWeatherMap
+- **UI Framework**: Streamlit
+- **Data Source**: Hugging Face `argilla/farming`
+
+## ⚙️ Setup & Run
+
+### 1. Environment Configuration
+Create a `.env` file from the provided template:
+```env
+OPENWEATHERMAP_API_KEY=your_key
+GEMINI_API_KEY=your_key
+PINECONE_API_KEY=your_key
+PINECONE_INDEX=farm-advisory
+```
+
+### 2. Build Knowledge Base
+Run the automated script to download data and populate your Pinecone index:
+```bash
+.\venv\Scripts\python 07_farm_advisory_bot\scripts\build_knowledge.py
+```
+
+### 3. Launch the Bot
+```bash
+.\venv\Scripts\python -m streamlit run 07_farm_advisory_bot\app.py
+```
+
+## 📊 Evaluation
+The system was tested against typical UAE farming scenarios:
+- **Scenario A (Heatwave)**: Bot recommends increased irrigation for date palms based on a 42°C reading from OpenWeatherMap.
+- **Scenario B (Pest ID)**: Bot identifies tomato leaf yellowing symptoms using the RAG database and provides MOCCAE-aligned treatment steps.
+
+---
+*Built for the UAE AI Student Projects Portfolio — Advancing Food Security through Real-Time AI.*
