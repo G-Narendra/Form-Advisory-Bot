@@ -1,0 +1,7 @@
+streamlit
+pinecone-client
+langchain-pinecone
+langchain-google-genai
+datasets
+requests
+python-dotenv
